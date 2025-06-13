@@ -1,23 +1,24 @@
 # Climate-Adaptive-Architecture-Tool
-- [[#Approach|Approach]]
-- [[#1. Structured Data Extraction|1. Structured Data Extraction]]
-- [[#2. Connecting Structured Data to Real World Impact|2. Connecting Structured Data to Real World Impact]]
-- [[#3. Modeling the Impact of Climate Change|3. Modeling the Impact of Climate Change]]
-- [[#4. Actionable Insights and Recommendations|4. Actionable Insights and Recommendations]]
-- [[#Technical Decisions|Technical Decisions]]
-	- [[#Frontend (React)|Frontend (React)]]
-	- [[#Backend (Node + Hono)|Backend (Node + Hono)]]
-	- [[#Environment Variables|Environment Variables]]
-- [[#Usage and Example Prompts|Usage and Example Prompts]]
+- [Approach](#approach)
+- [1. Structured Data Extraction](#1-structured-data-extraction)
+- [2. Connecting Structured Data to Real World Impact](#2-connecting-structured-data-to-real-world-impact)
+- [3. Modeling the Impact of Climate Change](#3-modeling-the-impact-of-climate-change)
+- [4. Actionable Insights and Recommendations](#4-actionable-insights-and-recommendations)
+- [Technical Decisions](#technical-decisions)
+  - [Frontend (React)](#frontend-react)
+  - [Backend (Node + Hono)](#backend-node--hono)
+  - [Environment Variables](#environment-variables)
+- [Usage and Example Prompts](#usage-and-example-prompts)
 
-### Approach
+
+## Approach
 My approach can be broken into four main steps.
 1. Pulling out structured data from the input prompt.
 2. Projecting outcomes by connecting structured data to real-world impact and historical data.
 3. Modeling the future impact of climate change on architectural decisions through Sea Level Rise (SLR) Projections
 4. Extracting recommendations and actionable insight through assembled context.
 
-### 1. Structured Data Extraction
+## 1. Structured Data Extraction
 To pull out structured data from the input prompt, I used Instructor.js. Instructor.js acts as a wrapper around OpenAI’s API that lets you define the exact data you want using a Zod schema. You pass free-form text to the model, and Instructor guides it to return structured, validated output that matches your schema. Zod defines the expected fields, OpenAI interprets the text, and Instructor ensures the final response conforms to your schema.
 
 I used this method to extract details about the proposed building, the timeline that the user is interested in understanding, and how severe the model should project the impact of climate change.
@@ -30,7 +31,7 @@ The schema roughly had the following data:
 
 Additionally, I used it to pull out materials found in the input text.
 
-### 2. Connecting Structured Data to Real World Impact
+## 2. Connecting Structured Data to Real World Impact
 I found 3 ways to connect the input schema to real world datasets.
 
 I found [FEMA Flood Damage-Resistant Requirement](http://fema.gov/sites/default/files/documents/fema_tb_2_flood_damage-resistant_materials_requirements_01-22-2025.pdf) on page 8, Table 1 shows structural materials and their `Flood Damage-Resistance Rating`, which is classified as acceptable/unacceptable. I used this to classify materials found in the input prompt description.  This is later used to make recommendations for improvement if something is found to be unacceptable.
@@ -40,10 +41,10 @@ In the [Hazus Flood Model Technical Maual](https://www.fema.gov/sites/default/fi
 Lastly, I integrated a [NOAA API](https://api.tidesandcurrents.noaa.gov/dpapi/prod/#:~:text=End%20Date-,Sea%20Level%20Rise%20Projections,-Input%20Parameters) that accepts geographic coordinates and returns sea level rise (SLR) projections by decade. This allowed me to estimate future 100-year flood events based on location-specific data. The API further expands on its projection by providing `Low`, `Intermediate-Low`, `Intermediate`, Intermediate-High, and High projections, enabling users to describe a range of scenarios.
 
 To ensure accuracy, I used the Google Maps API to convert user-provided text locations into precise coordinates before querying the SLR projections.
-### 3. Modeling the Impact of Climate Change
+## 3. Modeling the Impact of Climate Change
 Using the projected sea level rise (SLR) and the foundation-specific flood impact data from the Hazus Technical Manual, I was able to connect the user’s input, including their projected year, foundation type, level of expected climate impact and real-world location, to an estimated percentage of damage during a 100-year flood event.
 
-### 4. Actionable Insights and Recommendations
+## 4. Actionable Insights and Recommendations
 All of the assembled information was provided as context to an LLM call that prompts examination of the data and generates a report.
 
 The report should be generated with 6 main sections:
@@ -65,7 +66,7 @@ The backend is a Node.js application using Hono.js as a routing library. It uses
 
 The frontend is a React application, and it uses react-markdown to render the LLM output.
 
-##### Frontend (React)
+#### Frontend (React)
 1. Navigate to the client directory
 2. Install dependencies
 3. Start the development server
@@ -77,7 +78,7 @@ npm run dev
 ```
 
 The frontend will be available at [http://localhost:5173](http://localhost:5173).
-##### Backend (Node + Hono)
+#### Backend (Node + Hono)
 1. Navigate to the server directory:
 2. Install dependencies:
 3. Start the backend server:
@@ -87,7 +88,7 @@ npm install
 tsx src/index.ts
 ```
 
-##### Environment Variables
+#### Environment Variables
 Create a `.env` file in the `./server` directory with the following keys:
 ```
 OPENAI_API_KEY=
