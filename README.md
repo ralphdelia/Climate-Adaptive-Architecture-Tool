@@ -36,9 +36,9 @@ I found 3 ways to connect the input schema to real world datasets.
 
 I found [FEMA Flood Damage-Resistant Requirement](http://fema.gov/sites/default/files/documents/fema_tb_2_flood_damage-resistant_materials_requirements_01-22-2025.pdf) on page 8, Table 1 shows structural materials and their `Flood Damage-Resistance Rating`, which is classified as acceptable/unacceptable. I used this to classify materials found in the input prompt description.  This is later used to make recommendations for improvement if something is found to be unacceptable.
 
-In the [Hazus Flood Model Technical Maual](https://www.fema.gov/sites/default/files/documents/fema_hazus-flood-model-technical-manual-5-1.pdf?utm_source=chatgpt.com) on page 5-12, Figure 5-1 shows the impact on damage as a percentage based on flood water depth. This was especially helpful because it was broken down by foundation type. Although I wasn't able to find this data, I was about to create a mock and used the extract foundation type from the previous step to model how vulnerable each foundation was at a given depth.
+In the [Hazus Flood Model Technical Maual](https://www.fema.gov/sites/default/files/documents/fema_hazus-flood-model-technical-manual-5-1.pdf?utm_source=chatgpt.com) on page 5-12, Figure 5-1 shows the impact on damage as a percentage based on flood water depth. This was especially helpful because it was broken down by foundation type. Although I wasn't able to find that date used in this chart, I was able to create a mock and used the extracted foundation type from the previous step to model how vulnerable each foundation was at a given depth.
 
-Lastly, I integrated a [NOAA API](https://api.tidesandcurrents.noaa.gov/dpapi/prod/#:~:text=End%20Date-,Sea%20Level%20Rise%20Projections,-Input%20Parameters) that accepts geographic coordinates and returns sea level rise (SLR) projections by decade. This allowed me to estimate future 100-year flood events based on location-specific data. The API further expands on its projection by providing `Low`, `Intermediate-Low`, `Intermediate`, Intermediate-High, and High projections, enabling users to describe a range of scenarios.
+Lastly, I integrated a [NOAA API](https://api.tidesandcurrents.noaa.gov/dpapi/prod/#:~:text=End%20Date-,Sea%20Level%20Rise%20Projections,-Input%20Parameters) that accepts geographic coordinates and returns sea level rise (SLR) projections by decade. This allowed me to estimate future 100-year flood events based on location-specific data. The API further expands on its projection by providing `Low`, `Intermediate-Low`, `Intermediate`, `Intermediate-High`, and `High` projections, enabling users to describe a range of scenarios.
 
 To ensure accuracy, I used the Google Maps API to convert user-provided text locations into precise coordinates before querying the SLR projections.
 ## 3. Modeling the Impact of Climate Change
@@ -47,7 +47,7 @@ Using the projected sea level rise (SLR) and the foundation-specific flood impac
 ## 4. Actionable Insights and Recommendations
 All of the assembled information was provided as context to an LLM call that prompts examination of the data and generates a report.
 
-The report should be generated with 6 main sections:
+The report is generated with 6 main sections:
 1. A single **Resilience Score** (0–100) for the projected year.
 2. A **Performance Timeline**
 3. **Material Recommendations**
@@ -64,7 +64,7 @@ After this final step, the report would be provided to the user. Additionally, I
 ## Technical Decisions
 The backend is a Node.js application using Hono.js as a routing library. It uses Instructor.js for structured data extraction and OpenAI as an LLM model. Additionally, it makes use of the Google Maps API to convert the user's input location to geographic coordinates.
 
-The frontend is a React application, and it uses react-markdown to render the LLM output.
+The frontend is a vite React application, and it uses react-markdown to render the LLM output.
 
 #### Frontend (React)
 1. Navigate to the client directory
@@ -96,5 +96,5 @@ OPENAI_ORG_ID=
 GOOGLE_API_KEY=
 ```
 
-## Usage and Example Prompts
+## Usage & Prompts
 The model relies heavily on the existence of a few data points in the input prompt. Specifically, Location, foundation type should be included for the best results; other inputs have default fallbacks. For the best results, be sure to include a year in the future, climate severity estimate, flood mitigation features, and structural materials.

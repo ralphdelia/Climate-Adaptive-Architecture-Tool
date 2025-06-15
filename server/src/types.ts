@@ -1,9 +1,13 @@
 import { z } from "zod";
 
+export const GenerateInputSchema = z.object({
+  input: z.string(),
+});
+
 export const MaterialSchema = z.object({
   material: z.string(),
   description: z.string(),
-  acceptable: z.boolean(),
+  acceptable: z.boolean().default(false),
 });
 
 export const FilteredMaterialsSchema = z.object({
@@ -42,12 +46,13 @@ export const BuildingContextSchema = z.object({
   climateAssumption: ClimateImpactEnum.default("Intermediate").describe(
     "Assumption about climate impact severity",
   ),
-  foundationType: FoundationTypeEnum.nullable().describe(
-    "Classification of foundation for residential building.",
-  ),
+  foundationType: FoundationTypeEnum.nullable()
+    .default(null)
+    .describe("Classification of foundation for residential building."),
   floodMitigationFeatures: z
     .string()
     .nullable()
+    .default(null)
     .describe("Description of architectural or structural mitigation features"),
   floodMitigationDescription: z.string().nullable().describe(`
       When a flood mitigation feature is present provide a description of how

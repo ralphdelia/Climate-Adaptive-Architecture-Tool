@@ -27,7 +27,6 @@ export async function getBuildingData(userPrompt: string) {
     Here is the building description:
     ${userPrompt}
   `;
-
   const buildingData = await client.chat.completions.create({
     messages: [
       { role: "system", content: systemPrompt },
@@ -40,24 +39,27 @@ export async function getBuildingData(userPrompt: string) {
     },
     max_retries: 2,
   });
+
   return buildingData;
 }
 
 export async function getMaterialsList(userPrompt: string) {
   const systemPrompt = `
-    You are a strict filter tool. Parse the user input and return relevent building materials from the predefined list.
+    You are a strict filter tool. Parse the user input and return relevant building materials from the predefined list.
     You must only return material objects that appear to be referenced in the user prompt.
     You must choose from the provided list only. Return the matching objects EXACTLY as they appear.
     Do not invent. Do not rephrase.
-    `;
+    `.trim();
+
+  const materialsListText = MATERIALS_TABLE.map(
+    (mat) => `Material: ${mat.material}, Description: ${mat.description}`,
+  ).join("\n");
 
   const userMessage = `
     User input: ${userPrompt}
     Here is the full list of available materials:
-    ${MATERIALS_TABLE.map((mat) => {
-      return `Material: ${mat.material}, Description: ${mat.description} \n`;
-    })}
-    `;
+    ${materialsListText}
+    `.trim();
 
   const materialList = await client.chat.completions.create({
     messages: [
@@ -71,5 +73,6 @@ export async function getMaterialsList(userPrompt: string) {
     },
     max_retries: 2,
   });
+
   return materialList;
 }

@@ -8,40 +8,79 @@ import { getCoordinates } from "./apis/geocode.js";
 import { getFloodData, getSLRProjection } from "./apis/floodAPIs.js";
 import { generateContext, generateReport } from "./prompts.js";
 
+import { GenerateInputSchema } from "./types.js";
+
 const app = new Hono();
 
-app.post("/api/generate", async (c) => {
-  const body = await c.req.json();
-  const input = body.input;
-
+const step = async <T>(label: string, promise: Promise<T>): Promise<T> => {
   try {
+    return await promise;
+  } catch (err) {
+    console.error(`Step failed: ${label}`, err);
+    throw new Error(`Error during ${label}`);
+  }
+};
+
+app.post("/api/generate", async (c) => {
+  try {
+    const body = await c.req.json();
+    const parseResult = GenerateInputSchema.safeParse(body);
+
+    if (!parseResult.success) {
+      return c.json(
+        { error: "Invalid request body", details: parseResult.error.format() },
+        400,
+      );
+    }
+
+    const { input } = parseResult.data;
+
+    // Extract structured data from prompt
     const [materialsList, buildingData] = await Promise.all([
-      getMaterialsList(input),
-      getBuildingData(input),
+      step("getMaterialsList", getMaterialsList(input)),
+      step("getBuildingData", getBuildingData(input)),
     ]);
 
-    const coordinates = await getCoordinates(buildingData.location);
+    // Get coordinates from Google Maps API by user prompt location
+    const coordinates = await step(
+      "getCoordinates",
+      getCoordinates(buildingData.location),
+    );
 
+    // Get Flood infromation (BFE and Zone) for specific location
+    // Get Sea Level Rise(SLR) projections using coordinates
     const [floodData, slrProjections] = await Promise.all([
-      getFloodData(coordinates),
-      getSLRProjection(
-        buildingData.projectionYear,
-        buildingData.climateAssumption,
-        coordinates,
+      step("getFloodData", getFloodData(coordinates)),
+      step(
+        "getSLRProjection",
+        getSLRProjection(
+          buildingData.projectionYear,
+          buildingData.climateAssumption,
+          coordinates,
+        ),
       ),
     ]);
 
+    // Assemble context for LLM call
     const context = generateContext({
       materialsList,
       buildingData,
       floodData,
       slrProjections,
     });
-    const report = await generateReport(input, context, buildingData);
+
+    // Generate report by providing context to LLM call
+    const report = await step(
+      "generateReport",
+      generateReport(input, context, buildingData),
+    );
 
     return c.json({ context, report });
   } catch (e: unknown) {
-    c.status(500);
+    console.error("Error in /api/generate:", e);
+
+    const message = e instanceof Error ? e.message : "Unknown server error";
+    return c.json({ error: "Internal server error", message }, 500);
   }
 });
 
