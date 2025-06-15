@@ -76,6 +76,13 @@ npm run dev
 
 The frontend will be available at [http://localhost:5173](http://localhost:5173).
 ### Backend (Node + Hono)
+Create a `.env` file in the `./server` directory with the following keys:
+```
+OPENAI_API_KEY=
+OPENAI_ORG_ID=
+GOOGLE_API_KEY=
+```
+
 1. Navigate to the server directory:
 2. Install dependencies:
 3. Start the backend server:
@@ -85,13 +92,6 @@ npm install
 tsx src/index.ts
 ```
 
-### Environment Variables
-Create a `.env` file in the `./server` directory with the following keys:
-```
-OPENAI_API_KEY=
-OPENAI_ORG_ID=
-GOOGLE_API_KEY=
-```
 
 ## Usage & Prompts
 The model relies heavily on the existence of a few data points in the input prompt. Specifically, location, and foundation type should be included for the best results; other inputs have default fallbacks. For the best results, be sure to include a year in the future, climate severity estimate, flood mitigation features, and structural materials.
