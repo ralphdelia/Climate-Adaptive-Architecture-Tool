@@ -4,11 +4,10 @@
 - [2. Connecting Structured Data to Real World Impact](#2-connecting-structured-data-to-real-world-impact)
 - [3. Modeling the Impact of Climate Change](#3-modeling-the-impact-of-climate-change)
 - [4. Actionable Insights and Recommendations](#4-actionable-insights-and-recommendations)
+- [Usage and Example Prompts](#usage-and-example-prompts)
 - [Technical Decisions](#technical-decisions)
   - [Frontend (React)](#frontend-react)
   - [Backend (Node + Hono)](#backend-node--hono)
-  - [Environment Variables](#environment-variables)
-- [Usage and Example Prompts](#usage-and-example-prompts)
 
 
 ## Approach
