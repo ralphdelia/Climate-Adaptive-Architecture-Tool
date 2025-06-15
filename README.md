@@ -58,6 +58,9 @@ The report is generated with 6 main sections:
 
 After this final step, the report would be provided to the user. Additionally, I felt that for transparency, I would also provide the context that was assembled as part of the report, so that the user could see any assumptions made by the model along the way.
 
+## Usage & Prompts
+The model relies heavily on the existence of a few data points in the input prompt. Specifically, location, and foundation type should be included for the best results; other inputs have default fallbacks. For the best results, be sure to include a year in the future, climate severity estimate, flood mitigation features, and structural materials.
+
 ## Technical Decisions
 The backend is a Node.js application using Hono.js as a routing library. It uses Instructor.js for structured data extraction and OpenAI as an LLM model. Additionally, it makes use of the Google Maps API to convert the user's input location to geographic coordinates.
 
@@ -91,7 +94,3 @@ cd ./server
 npm install
 tsx src/index.ts
 ```
-
-
-## Usage & Prompts
-The model relies heavily on the existence of a few data points in the input prompt. Specifically, location, and foundation type should be included for the best results; other inputs have default fallbacks. For the best results, be sure to include a year in the future, climate severity estimate, flood mitigation features, and structural materials.
