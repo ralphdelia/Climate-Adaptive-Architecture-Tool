@@ -3,7 +3,10 @@ import "./env.js";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 
-import { getBuildingData, getMaterialsList } from "./extractionTools.js";
+import {
+  extractBuildingData,
+  extractMaterialsList,
+} from "./extractionTools.js";
 import { getCoordinates } from "./apis/geocode.js";
 import { getFloodData, getSLRProjection } from "./apis/floodAPIs.js";
 import { generateContext, generateReport } from "./prompts.js";
@@ -37,8 +40,8 @@ app.post("/api/generate", async (c) => {
 
     // Extract structured data from prompt
     const [materialsList, buildingData] = await Promise.all([
-      step("getMaterialsList", getMaterialsList(input)),
-      step("getBuildingData", getBuildingData(input)),
+      step("extractMaterialsList", extractMaterialsList(input)),
+      step("extractBuildingData", extractBuildingData(input)),
     ]);
 
     // Get coordinates from Google Maps API by user prompt location

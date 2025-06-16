@@ -10,7 +10,7 @@ const client = Instructor({
   mode: "TOOLS",
 });
 
-export async function getBuildingData(userPrompt: string) {
+export async function extractBuildingData(userPrompt: string) {
   const systemPrompt = `
     You are an expert building context extractor.
     You will be given a user description of a building scenario.
@@ -43,7 +43,7 @@ export async function getBuildingData(userPrompt: string) {
   return buildingData;
 }
 
-export async function getMaterialsList(userPrompt: string) {
+export async function extractMaterialsList(userPrompt: string) {
   const systemPrompt = `
     You are a strict filter tool. Parse the user input and return relevant building materials from the predefined list.
     You must only return material objects that appear to be referenced in the user prompt.
