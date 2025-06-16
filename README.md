@@ -54,7 +54,7 @@ The report is generated with 6 main sections:
 4. **Mitigation Feature Suggestions**
       • Specific, locally appropriate measures for New Orleans (e.g., breakaway walls, elevated utilities, sacrificial lower levels).
 5. **Foundation Advice**
-      • Using the % loss from sea-level rise + foundation type, if the loss is high, propose foundation upgrades (e.g., deeper piles, higher elevation).
+      • Using the % damage from sea-level rise + foundation type, if the damage is high, propose foundation upgrades (e.g., deeper piles, higher elevation).
 6. A brief **Cost–Benefit Analysis** for each major recommendation (estimated cost vs. % damage reduction or years of added service life).
 
 After this final step, the report would be provided to the user. Additionally, I felt that for transparency, I would also provide the context that was assembled as part of the report, so that the user could see any assumptions made by the model along the way.
