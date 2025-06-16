@@ -62,15 +62,15 @@ After this final step, the report would be provided to the user. Additionally, I
 ## Usage & Prompts
 The model relies heavily on the existence of a few data points in the input prompt. Specifically, location, and foundation type should be included for the best results; other inputs have default fallbacks. For the best results, be sure to include a year in the future, climate severity estimate, flood mitigation features, and structural materials.
 
-## Technical Decisions
-The backend is a Node.js application using Hono.js as a routing library. It uses Instructor.js for structured data extraction and OpenAI as an LLM model. Additionally, it makes use of the Google Maps API to convert the user's input location to geographic coordinates.
-
-The frontend is a vite React application, and it uses react-markdown to render the LLM output.
-
 ## Future work
 The focus of this project was on connecting user-provided input to real-world datasets, climate projections, and structural outcomes in a way that supports actionable, personalized insights. Given the time, I did my best to find these data sources and studies, but given more time, I would expand and improve the quality of the datasets. 
 
 Additionally, I would like to improve the model's ability to clarify and assemble additional context when needed.  The current model assembles context and generates a report in one pass. A more advanced approach, inspired by OpenAI's "deep research" workflows, would prompt users for clarification or missing details before continuing. For example, if a user does not specify a location or foundation type, the model could ask follow-up questions to fill in those gaps. This would improve transparency and reduce reliance on assumptions.
+
+## Technical Decisions
+The backend is a Node.js application using Hono.js as a routing library. It uses Instructor.js for structured data extraction and OpenAI as an LLM model. Additionally, it makes use of the Google Maps API to convert the user's input location to geographic coordinates.
+
+The frontend is a vite React application, and it uses react-markdown to render the LLM output.
 
 ## Getting Started
 
